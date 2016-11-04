@@ -24,13 +24,6 @@ func check (e error) {
     }
 }
 
-func WriteImageToFile (f string, b []byte) int {
-    e := ioutil.WriteFile(f, b, 0644)
-    check (e)
-    fmt.Printf("Written %s\n", f)
-    return len(b)
-}
-
 type Image struct {
     x0, y0, xn, yn int
     depth uint
@@ -63,15 +56,27 @@ func RenderImage(m image.Image) []byte {
     return buf.Bytes()
 }
 
+func WriteImageToFile (f string, b []byte) int {
+    e := ioutil.WriteFile(f, b, 0644)
+    check (e)
+    fmt.Printf("Written %s\n", f)
+    return len(b)
+}
+
 func SaveImage(i int, dir string) int {
         m := Image{1, 1, IMG_WIDTH + 1, IMG_HEIGHT + 1, uint(i)}
         ind := strconv.Itoa(i)
         f := dir + "/" + ind + ".png"
-        WriteImageToFile(f, RenderImage(m))
+        fmt.Println("Processing ", ind);
+        go WriteImageToFile(f, RenderImage(m))
         return 0
 }
 
+func quit() {
+    fmt.Println("QUITTING")
+}
 func main() {
+    defer quit()
     start, e_start := strconv.Atoi(os.Args[1])
     depth, e_depth := strconv.Atoi(os.Args[2])
     delta, e_delta := strconv.Atoi(os.Args[3])
