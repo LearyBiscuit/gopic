@@ -27,6 +27,7 @@ func check (e error) {
 func WriteImageToFile (f string, b []byte) {
     e := ioutil.WriteFile(f, b, 0644)
     check (e)
+    fmt.Printf("Written %s\n", f)
 }
 
 type Image struct {
@@ -61,7 +62,12 @@ func RenderImage(m image.Image) []byte {
     return buf.Bytes()
 }
 
-// func SaveImage()
+func SaveImage(i int, dir string) {
+        m := Image{1, 1, IMG_WIDTH + 1, IMG_HEIGHT + 1, uint(i)}
+        ind := strconv.Itoa(i)
+        f := dir + "/" + ind + ".png"
+        WriteImageToFile(f, RenderImage(m))
+}
 
 func main() {
     start, e_start := strconv.Atoi(os.Args[1])
@@ -75,11 +81,7 @@ func main() {
     e := os.MkdirAll(out_dir, 0755)
     check(e)
     for i := start; i < depth; i = i + delta {
-        m := Image{1, 1, IMG_WIDTH + 1, IMG_HEIGHT + 1, uint(i)}
-        ind := strconv.Itoa(i)
-        f := out_dir + "/" + ind + ".png"
-        WriteImageToFile(f, RenderImage(m))
-        fmt.Printf("Written %s\n", f)
+        SaveImage(i, out_dir)
     }
 
 }
