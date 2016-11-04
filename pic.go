@@ -24,6 +24,13 @@ func check (e error) {
     }
 }
 
+func WriteImageToFile (f string, b []byte) int {
+    e := ioutil.WriteFile(f, b, 0644)
+    check (e)
+    fmt.Printf("Written %s\n", f)
+    return len(b)
+}
+
 type Image struct {
     x0, y0, xn, yn int
     depth uint
@@ -54,13 +61,6 @@ func RenderImage(m image.Image) []byte {
     err := png.Encode(&buf, m)
     check(err)
     return buf.Bytes()
-}
-
-func WriteImageToFile (f string, b []byte) int {
-    e := ioutil.WriteFile(f, b, 0644)
-    check (e)
-    fmt.Printf("Written %s\n", f)
-    return len(b)
 }
 
 func SaveImage(i int, dir string) int {
