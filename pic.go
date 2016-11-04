@@ -13,7 +13,10 @@ import (
     "strconv"
 )
 
-const IMG_WIDTH, IMG_HEIGHT := 1080, 1080
+const (
+    IMG_WIDTH int = 1080
+    IMG_HEIGHT int = 1080
+)
 
 func check (e error) {
     if e != nil {
